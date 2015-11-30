@@ -1,4 +1,4 @@
-package rb
+package randbench
 
 import (
 	"math/rand"

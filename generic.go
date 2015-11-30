@@ -1,4 +1,4 @@
-package rb
+package randbench
 
 type genericSrc struct {
 }

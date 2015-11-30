@@ -1,4 +1,4 @@
-package rb
+package randbench
 
 // #include <stdint.h>
 // #include <stdlib.h>
