@@ -1,8 +1,8 @@
 package rb
 
 import (
-	"testing"
 	"math/rand"
+	"testing"
 )
 
 func BenchmarkMathRand(b *testing.B) {

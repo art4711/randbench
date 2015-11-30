@@ -6,16 +6,16 @@ package rb
 import "C"
 
 import (
-	badrand "math/rand"	
+	badrand "math/rand"
 )
 
 type libcsrc int
 
-func (s libcsrc)Int63() int64 {
+func (s libcsrc) Int63() int64 {
 	return int64(C.r64())
 }
 
-func (s libcsrc)Seed(seed int64) {
+func (s libcsrc) Seed(seed int64) {
 	panic("if you seed this source you need to reconsider the choices you made in your life that led you to this")
 }
 

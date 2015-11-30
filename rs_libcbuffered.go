@@ -13,14 +13,14 @@ const bufsz = 256
 
 type libcbufsrc struct {
 	buf [bufsz]int64
-	bp int
+	bp  int
 }
 
-func (s *libcbufsrc)stir() {
+func (s *libcbufsrc) stir() {
 	C.arc4random_buf(unsafe.Pointer(&s.buf), C.size_t(unsafe.Sizeof(s.buf)))
 }
 
-func (s *libcbufsrc)Int63() int64 {
+func (s *libcbufsrc) Int63() int64 {
 	if s.bp == 0 {
 		s.stir()
 	}
@@ -29,10 +29,10 @@ func (s *libcbufsrc)Int63() int64 {
 	return r << 1 >> 1
 }
 
-func (s *libcbufsrc)Seed(seed int64) {
+func (s *libcbufsrc) Seed(seed int64) {
 	panic("if you seed this source you need to reconsider the choices you made in your life that led you to this")
 }
 
-func NewLibcBufRand() badrand.Source {	
+func NewLibcBufRand() badrand.Source {
 	return &libcbufsrc{}
 }
