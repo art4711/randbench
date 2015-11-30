@@ -5,37 +5,29 @@ import (
 	"testing"
 )
 
-func BenchmarkMathRand(b *testing.B) {
-	src := rand.New(rand.NewSource(1))
+func do(b *testing.B, src rand.Source) {
+	r := rand.New(src)
 	for i := 0; i < b.N; i++ {
-		_ = src.Int63()
+		_ = r.Int63()
 	}
+}
+
+func BenchmarkMathRand(b *testing.B) {
+	do(b, rand.NewSource(1))
 }
 
 func BenchmarkCryptoRand(b *testing.B) {
-	src := rand.New(NewCryptoRand())
-	for i := 0; i < b.N; i++ {
-		_ = src.Int63()
-	}
+	do(b, NewCryptoRand())
 }
 
 func BenchmarkLibcRand(b *testing.B) {
-	src := rand.New(NewLibcRand())
-	for i := 0; i < b.N; i++ {
-		_ = src.Int63()
-	}
+	do(b, NewLibcRand())
 }
 
 func BenchmarkLibcBufRand(b *testing.B) {
-	src := rand.New(NewLibcBufRand())
-	for i := 0; i < b.N; i++ {
-		_ = src.Int63()
-	}
+	do(b, NewLibcBufRand())
 }
 
 func BenchmarkCryptoBufRand(b *testing.B) {
-	src := rand.New(NewCryptoBufRand())
-	for i := 0; i < b.N; i++ {
-		_ = src.Int63()
-	}
+	do(b, NewCryptoBufRand())
 }
