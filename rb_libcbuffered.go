@@ -12,6 +12,7 @@ import (
 const bufsz = 256
 
 type libcbufsrc struct {
+	genericSrc
 	buf [bufsz]int64
 	bp  int
 }
@@ -27,10 +28,6 @@ func (s *libcbufsrc) Int63() int64 {
 	r := s.buf[s.bp]
 	s.bp = (s.bp + 1) % bufsz
 	return r << 1 >> 1
-}
-
-func (s *libcbufsrc) Seed(seed int64) {
-	panic("if you seed this source you need to reconsider the choices you made in your life that led you to this")
 }
 
 func NewLibcBufRand() badrand.Source {

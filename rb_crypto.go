@@ -7,6 +7,7 @@ import (
 )
 
 type src struct {
+	genericSrc
 }
 
 func (s *src) Int63() int64 {
@@ -16,10 +17,6 @@ func (s *src) Int63() int64 {
 		panic(err)
 	}
 	return i << 1 >> 1
-}
-
-func (s *src) Seed(seed int64) {
-	panic("if you seed this source you need to reconsider the choices you made in your life that led you to this")
 }
 
 func NewCryptoRand() badrand.Source {
