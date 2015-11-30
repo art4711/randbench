@@ -16,7 +16,7 @@ func (s *cryptosrc) Int63() int64 {
 	if err != nil {
 		panic(err)
 	}
-	return i << 1 >> 1
+	return i & 0x7fffffffffffffff
 }
 
 func NewCryptoRand() badrand.Source {

@@ -27,7 +27,7 @@ func (s *libcbufsrc) Int63() int64 {
 	}
 	r := s.buf[s.bp]
 	s.bp = (s.bp + 1) % bufsz
-	return r << 1 >> 1
+	return r & 0x7fffffffffffffff
 }
 
 func NewLibcBufRand() badrand.Source {

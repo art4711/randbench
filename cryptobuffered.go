@@ -27,7 +27,7 @@ func (s *cryptobufferedsrc) Int63() int64 {
 	}
 	r := s.buf[s.bp]
 	s.bp = (s.bp + 1) % cbufsz
-	return r << 1 >> 1
+	return r & 0x7fffffffffffffff
 }
 
 func NewCryptoBufRand() badrand.Source {
