@@ -32,3 +32,10 @@ func BenchmarkLibcBufRand(b *testing.B) {
 		_ = src.Int63()
 	}
 }
+
+func BenchmarkCryptoBufRand(b *testing.B) {
+	src := rand.New(NewCryptoBufRand())
+	for i := 0; i < b.N; i++ {
+		_ = src.Int63()
+	}
+}
