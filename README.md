@@ -83,13 +83,14 @@ up converting between integers and byte arrays back and forth.
 
 The interesting part is LibcRand and LibcBufRand. LibcRand is 24 times
 slower which isn't very bad, but it's a magnitude worse than I'd like
-it to be. But I had a strong suspicion that this is more due to two
+it to be. But I had a strong suspicion that this is more due to three
 things:
 
  - Go has a different function calling convention than C and
    translating the arguments between the two is expensive.
- - The old version of arc4random on my test system (MacOS) has
+ - The old version of `arc4random` on my test system (MacOS) has
    very expensive fork detection code (it calls `getpid`).
+ - `arc4random` locks for every call. math/rand doesn't.
 
 So to test that theory let's buffer the numbers that libc returns.
 LibcBufRand does that. And suddenly we're just 3.7x slower. This is
