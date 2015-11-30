@@ -6,11 +6,11 @@ import (
 	badrand "math/rand"
 )
 
-type src struct {
+type cryptosrc struct {
 	genericSrc
 }
 
-func (s *src) Int63() int64 {
+func (s *cryptosrc) Int63() int64 {
 	var i int64
 	err := binary.Read(goodrand.Reader, binary.LittleEndian, &i)
 	if err != nil {
@@ -20,5 +20,5 @@ func (s *src) Int63() int64 {
 }
 
 func NewCryptoRand() badrand.Source {
-	return &src{}
+	return &cryptosrc{}
 }
