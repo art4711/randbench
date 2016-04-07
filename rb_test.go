@@ -31,3 +31,7 @@ func BenchmarkLibcBufRand(b *testing.B) {
 func BenchmarkCryptoBufRand(b *testing.B) {
 	do(b, NewCryptoBufRand())
 }
+
+func BenchmarkCOverhead(b *testing.B) {
+	do(b, NewCOverhead())
+}
