@@ -66,6 +66,10 @@ return from the buffer.
 
 Like CryptoRand, but with a buffer like in LibcBufRand.
 
+### COverhead ###
+
+I'm curious, how big is the overhead of calling into C anyway?
+
 ## The results ##
 
     BenchmarkMathRand-4     	100000000	        10.0 ns/op
@@ -73,6 +77,7 @@ Like CryptoRand, but with a buffer like in LibcBufRand.
     BenchmarkLibcRand-4     	10000000	       240 ns/op
     BenchmarkLibcBufRand-4  	50000000	        36.9 ns/op
     BenchmarkCryptoBufRand-4	 2000000	       613 ns/op
+    BenchmarkCOverhead-4       	10000000	       211 ns/op
 
 We can see that the default non-random number generator takes 10ns per
 op. crypto/rand is 84 times slower. That's bad, although I suspect
@@ -86,8 +91,8 @@ slower which isn't very bad, but it's a magnitude worse than I'd like
 it to be. But I had a strong suspicion that this is more due to three
 things:
 
- - Go has a different function calling convention than C and
-   translating the arguments between the two is expensive.
+ - Go calling into C has non-trivial overhead. I'm pretty sure we're
+   messing with the stack and poke into the scheduler.
  - The old version of `arc4random` on my test system (MacOS) has
    very expensive fork detection code (it calls `getpid`).
  - `arc4random` locks for every call. math/rand doesn't.
@@ -100,6 +105,9 @@ Just to make sure that the buffer doesn't do something magical,
 CryptoBufRand implements the same buffer around the same source as
 CryptoRand, but as we can see, it doesn't magically become much
 better.
+
+And finally, COverhead is there to actually see the overhead
+of calling into C. Holy crap.
 
 ## Future tests ##
 
@@ -116,3 +124,9 @@ I'd really want to get rid of the overhead of `encoding/binary`. It's
 fun to poke fun at how a server language is bad at encoding and
 decoding data, but it would make sense to remove that stupid overhead
 to test the actual generator.
+
+### Implement a good algorithm in Go. ###
+
+The numbers from COverhead are horribly bad. It's evident that to have
+decent numbers here we can't pass into C. So we probably need to
+implement a good unpredictable number generator in Go.
