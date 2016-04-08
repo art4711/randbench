@@ -70,23 +70,29 @@ Like CryptoRand, but with a buffer like in LibcBufRand.
 
 I'm curious, how big is the overhead of calling into C anyway?
 
+### Unpredictable ###
+
+My own attempt at implementing parts of OpenBSD arc4random in Go.
+See: https://github.com/art4711/unpredictable
+
 ## The results ##
 
-    BenchmarkMathRand-4     	100000000	        10.0 ns/op
-    BenchmarkCryptoRand-4   	 2000000	       840 ns/op
-    BenchmarkLibcRand-4     	10000000	       240 ns/op
-    BenchmarkLibcBufRand-4  	50000000	        36.9 ns/op
-    BenchmarkCryptoBufRand-4	 2000000	       613 ns/op
-    BenchmarkCOverhead-4       	10000000	       211 ns/op
+    BenchmarkMathRand-4     	200000000	         9.86 ns/op	       0 B/op	       0 allocs/op
+    BenchmarkCryptoRand-4   	 2000000	       790 ns/op	      16 B/op	       2 allocs/op
+    BenchmarkLibcRand-4     	10000000	       227 ns/op	       0 B/op	       0 allocs/op
+    BenchmarkLibcBufRand-4  	50000000	        36.4 ns/op	       0 B/op	       0 allocs/op
+    BenchmarkCryptoBufRand-4	 3000000	       573 ns/op	       8 B/op	       0 allocs/op
+    BenchmarkCOverhead-4    	10000000	       196 ns/op	       0 B/op	       0 allocs/op
+    BenchmarkUnpredictable-4	30000000	        42.3 ns/op	       0 B/op	       0 allocs/op
 
 We can see that the default non-random number generator takes 10ns per
-op. crypto/rand is 84 times slower. That's bad, although I suspect
+op. crypto/rand is 80 times slower. That's bad, although I suspect
 that it has more to do with encoding/binary than the generator itself.
 For some weird reason Go decided to not have the `crypto/rand`
 generator pluggable into the nice framework from `math/rand` so we end
 up converting between integers and byte arrays back and forth.
 
-The interesting part is LibcRand and LibcBufRand. LibcRand is 24 times
+The interesting part is LibcRand and LibcBufRand. LibcRand is 23 times
 slower which isn't very bad, but it's a magnitude worse than I'd like
 it to be. But I had a strong suspicion that this is more due to three
 things:
@@ -98,7 +104,7 @@ things:
  - `arc4random` locks for every call. math/rand doesn't.
 
 So to test that theory let's buffer the numbers that libc returns.
-LibcBufRand does that. And suddenly we're just 3.7x slower. This is
+LibcBufRand does that. And suddenly we're just 3.6x slower. This is
 perfectly acceptable for vastly improved quality.
 
 Just to make sure that the buffer doesn't do something magical,
@@ -106,8 +112,11 @@ CryptoBufRand implements the same buffer around the same source as
 CryptoRand, but as we can see, it doesn't magically become much
 better.
 
-And finally, COverhead is there to actually see the overhead
-of calling into C. Holy crap.
+COverhead is there to actually see the overhead of calling into
+C. Holy crap.
+
+Unpredictable is my implementation of arc4random without the
+overhead of calling into C. 4x slower, not bad at all.
 
 ## Future tests ##
 

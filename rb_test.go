@@ -3,9 +3,11 @@ package randbench
 import (
 	"math/rand"
 	"testing"
+	"github.com/art4711/unpredictable"
 )
 
 func do(b *testing.B, src rand.Source) {
+	b.ReportAllocs()
 	r := rand.New(src)
 	for i := 0; i < b.N; i++ {
 		_ = r.Int63()
@@ -34,4 +36,8 @@ func BenchmarkCryptoBufRand(b *testing.B) {
 
 func BenchmarkCOverhead(b *testing.B) {
 	do(b, NewCOverhead())
+}
+
+func BenchmarkUnpredictable(b *testing.B) {
+	do(b, unpredictable.NewMathRandSource())
 }
