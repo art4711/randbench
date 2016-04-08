@@ -41,3 +41,7 @@ func BenchmarkCOverhead(b *testing.B) {
 func BenchmarkUnpredictable(b *testing.B) {
 	do(b, unpredictable.NewMathRandSource())
 }
+
+func BenchmarkCryptoCastRand(b *testing.B) {
+	do(b, NewCryptoCastRand())
+}
