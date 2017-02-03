@@ -126,12 +126,3 @@ overhead of calling into C. 4x slower, not bad at all.
 CryptoCast is there to see how much encoding/binary.Read adds to
 reading from crypto/rand. Quite a bit. Loos like 70ns per op. Still
 doesn't put crypto/rand anywhere near the other sources though.
-
-## Future tests ##
-
-### modern arc4random ###
-
-More modern `arc4random` code has much better fork detection, so at
-least that part can be improved. Also, the algorithm has changed, I'd
-really want to see how that performs. Maybe even implement the same
-algorithm in Go, just for comparison.
