@@ -139,3 +139,15 @@ doesn't put crypto/rand anywhere near the other sources though.
     BenchmarkCryptoCastRand-4   	 2000000	       706 ns/op	       8 B/op	       1 allocs/op
 
 Unpredictable is slowly catching up to math/rand.
+
+## Readers ##
+
+Another test added:
+
+    BenchmarkReadMathRand-4        	     300	   4908092 ns/op	 427.28 MB/s	      18 B/op	       0 allocs/op
+    BenchmarkReadUnpredictable-4   	     300	   4532524 ns/op	 462.69 MB/s	      66 B/op	       1 allocs/op
+
+Those two tests test `math/rand.New()` and `unpredictable.NewReader()`
+as `io.Reader`. `unpredictable` looks quite competitive in this
+comparison. What was the reason for a modern programming language
+standard library to implement bad randomness by default?
