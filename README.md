@@ -38,7 +38,8 @@ because that restriction is heavily documented in function names and
 everywhere else. Negative numbers are bad and so are unsigned 64 bit
 numbers. I don't know why, it actually is an extra restriction on our
 sources because they need to mask the high bits out while the default
-Go source doesn't. This smells like bug that was documented away.
+Go source doesn't. This smells like bug that was fixed through
+documentation.
 
 ### MathRand ###
 
