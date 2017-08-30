@@ -126,3 +126,16 @@ overhead of calling into C. 4x slower, not bad at all.
 CryptoCast is there to see how much encoding/binary.Read adds to
 reading from crypto/rand. Quite a bit. Loos like 70ns per op. Still
 doesn't put crypto/rand anywhere near the other sources though.
+
+## The results on Go 1.9 ##
+
+    BenchmarkMathRand-4         	200000000	         7.97 ns/op	       0 B/op	       0 allocs/op
+    BenchmarkCryptoRand-4       	 2000000	       729 ns/op	      16 B/op	       2 allocs/op
+    BenchmarkLibcRand-4         	 5000000	       359 ns/op	       0 B/op	       0 allocs/op
+    BenchmarkLibcBufRand-4      	50000000	        33.9 ns/op	       0 B/op	       0 allocs/op
+    BenchmarkCryptoBufRand-4    	 3000000	       599 ns/op	       8 B/op	       0 allocs/op
+    BenchmarkCOverhead-4        	20000000	        77.5 ns/op	       0 B/op	       0 allocs/op
+    BenchmarkUnpredictable-4    	50000000	        26.2 ns/op	       0 B/op	       0 allocs/op
+    BenchmarkCryptoCastRand-4   	 2000000	       706 ns/op	       8 B/op	       1 allocs/op
+
+Unpredictable is slowly catching up to math/rand.
