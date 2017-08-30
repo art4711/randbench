@@ -1,8 +1,10 @@
 package randbench
 
 import (
+	"io"
 	"math/rand"
 	"testing"
+
 	"github.com/art4711/unpredictable"
 )
 
@@ -44,4 +46,27 @@ func BenchmarkUnpredictable(b *testing.B) {
 
 func BenchmarkCryptoCastRand(b *testing.B) {
 	do(b, NewCryptoCastRand())
+}
+
+const sz = 2 * 1024 * 1024
+
+var scratch [sz]byte
+
+func doread(b *testing.B, src io.Reader) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		_, err := src.Read(scratch[:])
+		if err != nil {
+			b.Fatal(err)
+		}
+		b.SetBytes(sz)
+	}
+}
+
+func BenchmarkReadMathRand(b *testing.B) {
+	doread(b, rand.New(rand.NewSource(1)))
+}
+
+func BenchmarkReadUnpredictable(b *testing.B) {
+	doread(b, unpredictable.NewReader())
 }
